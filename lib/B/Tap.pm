@@ -8,12 +8,19 @@ our $VERSION = "0.01";
 use parent qw(Exporter);
 
 our @EXPORT = qw(tap);
+our @EXPORT_OK = qw(G_ARRAY G_VOID G_SCALAR);
+our %EXPORT_TAGS = (
+    'all' => [@EXPORT, @EXPORT_OK],
+);
+
+use Carp ();
 
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
 sub tap {
     my ($op, $root_op, $buf) = @_;
+    Carp::croak("Third argument should be ArrayRef") unless ref $buf eq 'ARRAY';
     _tap($$op, $$root_op, $buf);
 }
 

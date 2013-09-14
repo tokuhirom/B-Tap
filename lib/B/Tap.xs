@@ -29,22 +29,33 @@ static OP *XS_B_Tap_pp_push_sv(pTHX) {
 }
 
 static OP *XS_B_Tap_pp_tap(pTHX) {
+    dXSARGS;
     int i;
     SV *tmp;
-    dXSARGS;
+    AV *ret = newAV();
 
-    AV * av = newAV();
-    for (i=0; i<items; i++) {
-        SvREFCNT_inc(ST(i));
-        av_push(av, ST(i));
+    av_push(ret, newSViv(GIMME_V));
+    if (GIMME_V == G_SCALAR) {
+        SvREFCNT_inc(ST(0));
+        av_push(ret, ST(0));
+    } else if (GIMME_V == G_VOID) {
+        /* do nothing */
+    } else {
+        AV * av = newAV();
+        for (i=0; i<items; i++) {
+            SvREFCNT_inc(ST(i));
+            av_push(av, ST(i));
+        }
+        av_push(ret, newRV_noinc((SV*)av));
     }
 
     /* I know what this temporary variable is ugly. Patches welcome. */
     tmp = get_sv("B::Tap::_TMP", GV_ADD);
     if (SvROK(tmp) && SvTYPE(SvRV(tmp)) == SVt_PVAV) {
-        av_push((AV*)SvRV(tmp), newRV_noinc((SV*)av));
+        av_push((AV*)SvRV(tmp), newRV_noinc((SV*)ret));
     } else {
-        sv_setsv(tmp, newRV_noinc((SV*)av));
+        sv_dump(tmp);
+        croak("ArrayRef is expected, but it's not ArrayRef.");
     }
 
     RETURN;
@@ -102,6 +113,12 @@ BOOT:
     XopENTRY_set(&my_xop_push_sv, xop_desc, "b_Tap_push_sv");
     XopENTRY_set(&my_xop_push_sv, xop_class, OA_SVOP);
     Perl_custom_op_register(aTHX_ XS_B_Tap_pp_push_sv, &my_xop_push_sv);
+
+    /* Register constats */
+    HV* stash = gv_stashpvn("B::Tap", strlen("B::Tap"), TRUE);
+    newCONSTSUB(stash, "G_SCALAR", newSViv(G_SCALAR));
+    newCONSTSUB(stash, "G_ARRAY",  newSViv(G_ARRAY));
+    newCONSTSUB(stash, "G_VOID",   newSViv(G_VOID));
 
 void
 _tap(opp, root_opp, buf)

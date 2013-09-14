@@ -3,7 +3,7 @@ use Test::More;
 
 use B qw(class);
 
-use B::Tap;
+use B::Tap ':all';
 use B::Deparse;
 use B::Tools;
 
@@ -26,7 +26,7 @@ like(B::Deparse->new->coderef2text($code), qr{5963});
 $code->();
 is_deeply(
     \@buf, [
-        [5963]
+        [G_SCALAR, 5963]
     ]
 );
 pass 'no segv';

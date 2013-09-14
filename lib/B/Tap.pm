@@ -1,5 +1,5 @@
 package B::Tap;
-use 5.008005;
+use 5.014000;
 use strict;
 use warnings;
 
@@ -25,7 +25,7 @@ sub tap {
     };
     sub B::Deparse::pp_b_tap_push_sv {
         '';
-    };
+    }
 }
 
 1;
@@ -53,7 +53,25 @@ B::Tap - Inject tapping node to optree
 
 =head1 DESCRIPTION
 
-B::Tap is tapping library for tap.
+B::Tap is tapping library for B tree. C<tap> function injects custom ops for fetching result of the node.
+
+The implementation works, but it's not beautifule code. I'm newbie about the B world, Patches welcome.
+
+B<WARNINGS: This module is in a alpha state. Any API will change without notice.>
+
+=head1 FAQ
+
+=over 4
+
+=item Why this module required 5.14+?
+
+Under 5.14, Perl5's custom op support is incomplete. B::Deparse can't deparse the code using custom ops.
+
+I seem this library without deparsing is useless.
+
+But if you want to use this with 5.8, it may works.
+
+=back
 
 =head1 LICENSE
 

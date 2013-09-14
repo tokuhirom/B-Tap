@@ -20,6 +20,12 @@ B::Tap - Inject tapping node to optree
 
 B::Tap is tapping library for tap.
 
+# FAQ
+
+- Why this module required 5.14+?
+
+    Perl 5.14-'s custom op support is incomplete. B::Deparse can't deparse it.
+
 # LICENSE
 
 Copyright (C) tokuhirom.

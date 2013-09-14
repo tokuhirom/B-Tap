@@ -25,11 +25,9 @@ my %args = (
 
     name            => 'B-Tap',
     module_name     => 'B::Tap',
-    allow_pureperl => 0,
+    allow_pure_perl => 0,
 
     script_files => [glob('script/*'), glob('bin/*')],
-    c_source     => [qw()],
-    PL_files => {},
 
     test_files           => ((-d '.git' || $ENV{RELEASE_TESTING}) && -d 'xt') ? 't/ xt/' : 't/',
     recursive_test_files => 1,

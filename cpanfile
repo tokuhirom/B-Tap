@@ -1,5 +1,4 @@
-requires 'perl', '5.008001';
-requires 'B::Generate';
+requires 'perl', '5.014000';
 requires 'parent';
 
 on 'test' => sub {

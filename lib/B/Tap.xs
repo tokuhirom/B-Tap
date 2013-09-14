@@ -18,12 +18,15 @@ static XOP my_xop_tap;
 static XOP my_xop_push_sv;
 
 static OP *XS_B_Tap_pp_push_sv(pTHX) {
-    dXSARGS;
+    dXSARGS; dORIGMARK;
 
     SV* const sv = cSVOP_sv;
     /* I know what this temporary variable is ugly. Patches welcome. */
     SV * tmp = get_sv("B::Tap::_TMP", GV_ADD);
     sv_setsv(tmp, sv);
+
+    /* Restore mark after work. */
+    PUSHMARK(ORIGMARK);
 
     RETURN;
 }

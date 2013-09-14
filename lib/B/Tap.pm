@@ -38,6 +38,8 @@ sub tap {
 1;
 __END__
 
+=for stopwords optree newbie deparse deparsing
+
 =encoding utf-8
 
 =head1 NAME
@@ -62,9 +64,35 @@ B::Tap - Inject tapping node to optree
 
 B::Tap is tapping library for B tree. C<tap> function injects custom ops for fetching result of the node.
 
-The implementation works, but it's not beautifule code. I'm newbie about the B world, Patches welcome.
+The implementation works, but it's not beautiful code. I'm newbie about the B world, Patches welcome.
 
 B<WARNINGS: This module is in a alpha state. Any API will change without notice.>
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item tap($op, $root_op, \@buf)
+
+Tapping the result value of C<$op>. You need pass the C<$root_op> for rewriting tree structure. Tapped result value was stored to C<\@buf>. C<\@buf> must be arrayref.
+
+B::Tap push the current stack to C<\@buf>. First element for each value is C<GIMME_V>. Second element is the value of stacks.
+
+=item G_SCALAR
+
+=item G_ARRAY
+
+=item G_VOID
+
+These functions are not exportable by default. If you want to use these functions, specify the import arguments like:
+
+    use B::Tap ':all';
+
+Or
+
+    use B::Tap qw(G_SCALAR G_ARRAY G_VOID);
+
+=back
 
 =head1 FAQ
 

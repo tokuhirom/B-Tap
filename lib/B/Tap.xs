@@ -140,7 +140,7 @@ CODE:
 
     BINOP * b_tap = (BINOP*)newBINOP(OP_CUSTOM, 0, orig_op, (OP*)push_sv);
     b_tap->op_ppaddr   = XS_B_Tap_pp_tap;
-    b_tap->op_flags    = orig_op->op_flags;
+    b_tap->op_flags    = orig_op->op_flags | OPf_WANT;
     b_tap->op_first    = orig_op;
     b_tap->op_last     = (OP*)push_sv;
     b_tap->op_sibling  = sibling_op;

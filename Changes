@@ -2,6 +2,16 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.03 2013-09-15T01:15:30Z
+
+    - restore MARK on b_tap_tap
+
+0.02 2013-09-14T06:59:09Z
+
+    - Oops. I forgot to restore MARK.
+      It fixed segmentation fault on 32bit machines.
+      (Reported by syohex++)
+
 0.01 2013-09-14T03:37:15Z
 
     - original version

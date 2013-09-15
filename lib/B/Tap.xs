@@ -32,7 +32,7 @@ static OP *XS_B_Tap_pp_push_sv(pTHX) {
 }
 
 static OP *XS_B_Tap_pp_tap(pTHX) {
-    dXSARGS;
+    dXSARGS; dORIGMARK;
     int i;
     SV *tmp;
     AV *ret = newAV();
@@ -60,6 +60,9 @@ static OP *XS_B_Tap_pp_tap(pTHX) {
         sv_dump(tmp);
         croak("ArrayRef is expected, but it's not ArrayRef.");
     }
+
+    /* restore mark */
+    PUSHMARK(ORIGMARK);
 
     RETURN;
 }

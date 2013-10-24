@@ -3,7 +3,7 @@ use 5.014000;
 use strict;
 use warnings;
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
 use parent qw(Exporter);
 

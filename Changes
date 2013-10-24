@@ -2,6 +2,11 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.05 2013-09-18T04:54:19Z
+
+    - Apply OPf_KIDS for b_tap_tap.
+      (tokuhirom)
+
 0.04 2013-09-15T01:24:08Z
 
     - oops.

@@ -67,16 +67,74 @@ static OP *XS_B_Tap_pp_tap(pTHX) {
     RETURN;
 }
 
-#define RECURSE(next) rewrite_op(aTHX_ (OP*)next, orig, replacement)
-#define REPLACE(type, meth) \
-    if (((type)root)->meth == orig) { \
-        ((type)root)->meth = replacement; \
-    } else {\
-        RECURSE(((type)root)->meth); \
+/* characters, compatible with B::Concise */
+static char tap_oa_char(int oa_class) {
+    switch (oa_class) {
+    /*
+    case OA_OP:
+        return '0'; */
+    case OA_UNOP:
+        return '1';
+    case OA_BINOP:
+        return '2';
+    case OA_LOGOP:
+        return '|';
+    case OA_LISTOP:
+        return '@';
+    case OA_PMOP:
+        return '/';
+    case OA_SVOP:
+        return '$';
+        /*
+    case OA_PVOP:
+        return '"'; */
+    case OA_LOOP:
+        return '{';
+    case OA_COP:
+        return ';';
+    case OA_PADOP:
+        return '#';
+    default:
+        return '-'; /* unknown */
+    }
+}
+
+#define OP_CLASS_EX(op) \
+    ((op)->op_type == OP_NULL ? (PL_opargs[(op)->op_targ] & OA_CLASS_MASK) : OP_CLASS((op)))
+
+static char OA_CHAR(OP *op) {
+    return tap_oa_char(OP_CLASS_EX(op));
+}
+
+#define TAP_TRACE(op, depth) \
+    { \
+        int i; \
+        for (i=0;i<depth; i++) { \
+            PerlIO_printf(PerlIO_stderr(), " "); \
+        } \
+        PerlIO_printf(PerlIO_stderr(), " rewriting: <%c", OA_CHAR(op)); \
+        PerlIO_printf(PerlIO_stderr(), "> "); \
+        if (op->op_type == OP_NULL) { \
+            PerlIO_printf(PerlIO_stderr(), "ex-%s", PL_op_name[op->op_targ]); \
+        } else { \
+            PerlIO_printf(PerlIO_stderr(), "%s", OP_NAME(op)); \
+        } \
+        PerlIO_printf(PerlIO_stderr(), "\n"); \
     }
 
-static void rewrite_op(pTHX_ OP* root, OP* orig, OP* replacement) {
-    switch (OP_CLASS(root)) {
+
+#define RECURSE(next) rewrite_op(aTHX_ (OP*)next, orig, replacement, depth+1)
+#define REPLACE(type, meth) \
+    if (((type)target)->meth == orig) { \
+        ((type)target)->meth = replacement; \
+    } else {\
+        RECURSE(((type)target)->meth); \
+    }
+
+static void rewrite_op(pTHX_ OP* target, OP* orig, OP* replacement, int depth) {
+    /* TAP_TRACE(target, depth); */
+
+    switch (OP_CLASS_EX(target)) {
     case OA_UNOP:
         REPLACE(UNOP*, op_first);
         break;
@@ -93,11 +151,11 @@ static void rewrite_op(pTHX_ OP* root, OP* orig, OP* replacement) {
         break;
     }
 
-    if (root->op_sibling) {
-        if (root->op_sibling == orig) {
-            root->op_sibling = replacement;
+    if (target->op_sibling) {
+        if (target->op_sibling == orig) {
+            target->op_sibling = replacement;
         } else {
-            rewrite_op(aTHX_ (OP*)root->op_sibling, orig, replacement);
+            rewrite_op(aTHX_ (OP*)target->op_sibling, orig, replacement, depth);
         }
     }
 }
@@ -155,6 +213,6 @@ CODE:
     push_sv->op_next   = (OP*)b_tap;
     b_tap->op_next     = next_op;
 
-    rewrite_op(aTHX_ (OP*)root_opp, (OP*)orig_op, (OP*)b_tap);
+    rewrite_op(aTHX_ (OP*)root_opp, (OP*)orig_op, (OP*)b_tap, 0);
 }
 

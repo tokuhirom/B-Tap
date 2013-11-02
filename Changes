@@ -2,6 +2,11 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.06 2013-11-02T02:50:45Z
+
+    - Care extended ops.
+      (tokuhirom)
+
 0.05 2013-09-18T04:54:19Z
 
     - Apply OPf_KIDS for b_tap_tap.

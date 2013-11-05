@@ -140,7 +140,6 @@ static void rewrite_op(pTHX_ OP* target, OP* orig, OP* replacement, int depth) {
         break;
     case OA_BINOP:
         REPLACE(BINOP*, op_first);
-        REPLACE(BINOP*, op_last);
         break;
     case OA_LOGOP:
         REPLACE(LOGOP*, op_first);

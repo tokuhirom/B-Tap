@@ -10,8 +10,13 @@ use Test::More;
 # B::Deparse thinks OP_ENTERSUB's next op must be LISTOP.
 
 my $mech;
-# test(sub { foo->bar });
+test(sub { foo->bar });
 test(sub { foo($mech) });
+
+{
+    my $x = 0;
+    test(sub { 0+$x->y->{z} } );
+}
 
 done_testing;
 

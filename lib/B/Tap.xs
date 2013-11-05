@@ -102,7 +102,7 @@ static char tap_oa_char(int oa_class) {
 #define OP_CLASS_EX(op) \
     ((op)->op_type == OP_NULL ? (PL_opargs[(op)->op_targ] & OA_CLASS_MASK) : OP_CLASS((op)))
 
-static char OA_CHAR(OP *op) {
+static char OA_CHAR(pTHX_ OP *op) {
     return tap_oa_char(OP_CLASS_EX(op));
 }
 
@@ -112,7 +112,7 @@ static char OA_CHAR(OP *op) {
         for (i=0;i<depth; i++) { \
             PerlIO_printf(PerlIO_stderr(), " "); \
         } \
-        PerlIO_printf(PerlIO_stderr(), " rewriting: <%c", OA_CHAR(op)); \
+        PerlIO_printf(PerlIO_stderr(), " rewriting: <%c", OA_CHAR(aTHX_ op)); \
         PerlIO_printf(PerlIO_stderr(), "> "); \
         if (op->op_type == OP_NULL) { \
             PerlIO_printf(PerlIO_stderr(), "ex-%s", PL_op_name[op->op_targ]); \

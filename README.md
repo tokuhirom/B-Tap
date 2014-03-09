@@ -4,7 +4,9 @@ B::Tap - Inject tapping node to optree
 
 # SYNOPSIS
 
+    use B;
     use B::Tap;
+    use B::Tools;
 
     sub foo { 63 }
 

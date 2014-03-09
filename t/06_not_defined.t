@@ -11,17 +11,19 @@ plan skip_all => "Current implementation can't pass these tests.";
 {
     package A;
     sub new { bless({}, shift) }
-    sub response { 'tanaka' }
+    sub bar { 'tanaka' }
 }
 
 {
     # Given the object
-    my $mech = A->new;
+    my $foo = A->new;
 
-    # And there is the coderef, matches return value of the method and regexp
+    # And there is the coderef, calls method.
     my $code = sub {
-        $mech->response =~ qr/yoichiro/
+        defined($foo->bar('ja'))
     };
+
+    if (1) { concise_code($code) }
 
     # And find 'padsv' from the code's op tree
     my $cv = B::svref_2object($code);
@@ -59,7 +61,7 @@ done_testing;
 sub concise_code {
     my $code = shift;
     require B::Concise;
-    my $walker = B::Concise::compile('', '', $code);
+    my $walker = B::Concise::compile('-terse', '', $code);
     B::Concise::walk_output(\my $buf);
     $walker->();
     ::diag($buf);

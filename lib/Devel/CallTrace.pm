@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 
-our $VERSION = "0.08";
+our $VERSION = "0.09";
 
 our @WARNINGS;
 
@@ -110,7 +110,7 @@ Devel::CallTrace - Code tracer
 
 =head1 DESCRIPTION
 
-This module call the coderef, and fetch the Perl5 VM's temporary values.
+This module call the CodeRef, and fetch the Perl5 VM's temporary values.
 
 =head1 METHODS
 

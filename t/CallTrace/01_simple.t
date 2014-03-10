@@ -21,7 +21,7 @@ subtest 'expect data', sub {
     ok !$retval;
     my $out = $result->dump_pairs;
     ok @$out > 0;
-    like $out->[0], qr/expect/;
+    like $out->[0][0], qr/expect/;
     diag Dumper($out);
 };
 

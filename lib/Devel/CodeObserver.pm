@@ -98,8 +98,10 @@ sub dump_pairs {
 
                 my $deparse = B::Deparse->new();
                 $deparse->{curcv} = B::svref_2object($code);
-                push @pairs, $deparse->deparse($op);
-                push @pairs, Data::Dumper::Dumper($value->[1]);
+                push @pairs, [
+                    $deparse->deparse($op),
+                    Data::Dumper::Dumper($value->[1])
+                ];
             } catch {
                 warn "[Test::Power] [BUG]: $_";
                 push @WARNINGS, "[Test::Power] [BUG]: $_";
@@ -139,6 +141,17 @@ Call the C<$code> and get the tracing result.
 
 =back
 
+=head1 Devel::CodeObserver::Result's METHODS
+
+=over 4
+
+=item C<< $result->dump_pairs() : ArrayRef[ArrayRef[Str]] >>
+
+Returns the pair of the dump result. Return value's each element contains ArrayRef.
+Each element contains 2 values. First is the B::Deparse'd code. Second is the Dumper()'ed value.
+
+=back
+
 =head1 EXAMPLES
 
 Here is the concrete example.
@@ -163,8 +176,8 @@ Here is the concrete example.
     my $tracer = Devel::CodeObserver->new();
     my ($retval, $result) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
     print "RETVAL: $retval\n";
-    my $traced = $result->dump_pairs;
-    while (my ($code, $val) = splice @$traced, 0, 2) {
+    for my $pair (@{$result->dump_pairs}) {
+        my ($code, $val) = @$pair;
         print "$code => $val\n";
     }
 

@@ -2,6 +2,12 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.11 2014-03-10T01:31:58Z
+
+    [INCOMPATIBLE CHANGES]
+    - Devel::CodeObserver returns Devel::CodeObserver::Result instead of plain ArrayRef
+      (tokuhirom)
+
 0.10 2014-03-10T01:13:04Z
 
     - Added Devel::CodeObserver(formely known as Test::Power::Core)

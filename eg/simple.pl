@@ -16,8 +16,9 @@ my $dat = {
 };
 
 my $tracer = Devel::CodeObserver->new();
-my ($retval, $traced) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
+my ($retval, $result) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
 print "RETVAL: $retval\n";
+my $traced = $result->dump_pairs;
 while (my ($code, $val) = splice @$traced, 0, 2) {
     print "$code => $val\n";
 }

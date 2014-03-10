@@ -13,7 +13,6 @@ use B::Tap qw(tap);
 use B::Tools qw(op_walk);
 use B::Deparse;
 use Data::Dumper ();
-use Try::Tiny;
 
 sub new {
     my $class = shift;
@@ -54,12 +53,37 @@ sub call {
 
     return (
         $retval,
-        dump_pairs($code, [grep { @$_ > 1 } @tap_results]),
+        Devel::CallTrace::Result->new(
+            code => $code,
+            tap_results => [grep { @$_ > 1 } @tap_results],
+        )
     );
 }
 
+sub need_hook {
+    my $op = shift;
+    return 1 if $op->name eq 'entersub';
+    return 1 if $op->name eq 'padsv';
+    return 1 if $op->name eq 'aelem';
+    return 1 if $op->name eq 'helem';
+    return 1 if $op->name eq 'null' && ppname($op->targ) eq 'pp_rv2sv';
+    return 0;
+}
+
+package Devel::CallTrace::Result;
+
+use Try::Tiny;
+
+sub new {
+    my $class = shift;
+    my %args = @_==1 ? %{$_[0]} : @_;
+    bless {%args}, $class;
+}
+
 sub dump_pairs {
-    my ($code, $tap_results) = @_;
+    my ($self) = @_;
+    my $tap_results = $self->{tap_results};
+    my $code = $self->{code};
 
     my @pairs;
     local $Data::Dumper::Terse = 1;
@@ -85,17 +109,6 @@ sub dump_pairs {
     return \@pairs;
 }
 
-sub need_hook {
-    my $op = shift;
-    return 1 if $op->name eq 'entersub';
-    return 1 if $op->name eq 'padsv';
-    return 1 if $op->name eq 'aelem';
-    return 1 if $op->name eq 'helem';
-    return 1 if $op->name eq 'null' && ppname($op->targ) eq 'pp_rv2sv';
-    return 0;
-}
-
-
 1;
 __END__
 
@@ -120,7 +133,7 @@ This module call the CodeRef, and fetch the Perl5 VM's temporary values.
 
 Create new instance.
 
-=item C<< $tracer->call($code: CodeRef) : (Scalar, ArrayRef) >>
+=item C<< $tracer->call($code: CodeRef) : (Scalar, Devel::CodeObserver::Result) >>
 
 Call the C<$code> and get the tracing result.
 
@@ -148,8 +161,9 @@ Here is the concrete example.
     };
 
     my $tracer = Devel::CodeObserver->new();
-    my ($retval, $traced) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
+    my ($retval, $result) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
     print "RETVAL: $retval\n";
+    my $traced = $result->dump_pairs;
     while (my ($code, $val) = splice @$traced, 0, 2) {
         print "$code => $val\n";
     }

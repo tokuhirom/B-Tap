@@ -17,8 +17,9 @@ subtest 'return undef value', sub {
 
 subtest 'expect data', sub {
     my @p;
-    my ($retval, $out) = Devel::CodeObserver->new->call(sub { expect(\@p)->to_be(['a']) });
+    my ($retval, $result) = Devel::CodeObserver->new->call(sub { expect(\@p)->to_be(['a']) });
     ok !$retval;
+    my $out = $result->dump_pairs;
     ok @$out > 0;
     like $out->[0], qr/expect/;
     diag Dumper($out);

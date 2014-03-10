@@ -2,9 +2,9 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
-0.09 2014-03-10T01:04:32Z
+0.10 2014-03-10T01:13:04Z
 
-    - Added Devel::CallTrace(formely known as Test::Power::Core)
+    - Added Devel::CodeObserver(formely known as Test::Power::Core)
       (tokuhirom)
 
 0.08 2013-11-05T07:54:43Z

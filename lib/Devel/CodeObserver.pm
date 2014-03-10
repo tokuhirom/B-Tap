@@ -1,10 +1,10 @@
-package Devel::CallTrace;
+package Devel::CodeObserver;
 use strict;
 use warnings;
 use utf8;
 use 5.010_001;
 
-our $VERSION = "0.09";
+our $VERSION = "0.10";
 
 our @WARNINGS;
 
@@ -101,11 +101,11 @@ __END__
 
 =head1 NAME
 
-Devel::CallTrace - Code tracer
+Devel::CodeObserver - Code tracer
 
 =head1 SYNOPSIS
 
-    my $tracer = Devel::CallTrace->new();
+    my $tracer = Devel::CodeObserver->new();
     my ($retval, $trace_data) = $tracer->call(sub { $dat->{foo}{bar} eq 200 });
 
 =head1 DESCRIPTION
@@ -116,7 +116,7 @@ This module call the CodeRef, and fetch the Perl5 VM's temporary values.
 
 =over 4
 
-=item C<< my $tracer = Devel::CallTrace->new(); >>
+=item C<< my $tracer = Devel::CodeObserver->new(); >>
 
 Create new instance.
 
@@ -131,7 +131,7 @@ Call the C<$code> and get the tracing result.
 Here is the concrete example.
 
     use 5.014000;
-    use Devel::CallTrace;
+    use Devel::CodeObserver;
     use Data::Dumper;
 
     my $dat = {
@@ -147,7 +147,7 @@ Here is the concrete example.
         }
     };
 
-    my $tracer = Devel::CallTrace->new();
+    my $tracer = Devel::CodeObserver->new();
     my ($retval, $traced) = $tracer->call(sub { $dat->{z}->{m}[0]{n} eq 4 ? 1 : 0 });
     print "RETVAL: $retval\n";
     while (my ($code, $val) = splice @$traced, 0, 2) {
@@ -163,7 +163,7 @@ Output is here:
     $$dat{'z'} => {'m' => [{'n' => 3}]}
     $dat => {'z' => {'m' => [{'n' => 3}]},'x' => {'y' => 0}}
 
-Devel::CallTrace fetches the temporary values and return it.
+Devel::CodeObserver fetches the temporary values and return it.
 
 =head1 BUGS
 
@@ -176,7 +176,7 @@ But you can send me a patch.
 
 This version can't handles following form:
 
-    my $tracer = Devel::CallTrace->new();
+    my $tracer = Devel::CodeObserver->new();
     $tracer->call(sub { defined($foo->bar()) });
 
 Because B::Deparse::pp_entersub thinks next object is the `method_named` or LISTOP.

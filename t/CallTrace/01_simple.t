@@ -2,22 +2,22 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use Devel::CallTrace;
+use Devel::CodeObserver;
 use Data::Dumper;
 
 subtest 'return true value', sub {
-    my ($retval, $out) = Devel::CallTrace->new->call(sub { 2 });
+    my ($retval, $out) = Devel::CodeObserver->new->call(sub { 2 });
     is $retval, 2;
 };
 
 subtest 'return undef value', sub {
-    my ($retval, $out) = Devel::CallTrace->new->call(sub { undef });
+    my ($retval, $out) = Devel::CodeObserver->new->call(sub { undef });
     is $retval, undef;
 };
 
 subtest 'expect data', sub {
     my @p;
-    my ($retval, $out) = Devel::CallTrace->new->call(sub { expect(\@p)->to_be(['a']) });
+    my ($retval, $out) = Devel::CodeObserver->new->call(sub { expect(\@p)->to_be(['a']) });
     ok !$retval;
     ok @$out > 0;
     like $out->[0], qr/expect/;

@@ -2,6 +2,11 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.12 2014-03-14T01:42:23Z
+
+    - [Devel::CodeObserver] Load B::Deparse lazily.
+      (tokuhirom)
+
 0.11 2014-03-10T01:31:58Z
 
     [INCOMPATIBLE CHANGES]

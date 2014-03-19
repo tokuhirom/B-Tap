@@ -2,6 +2,10 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.13 2014-03-19T11:05:53Z
+
+    - Suppress warnings from Devel::CodeObserver
+
 0.12 2014-03-14T01:42:23Z
 
     - [Devel::CodeObserver] Load B::Deparse lazily.

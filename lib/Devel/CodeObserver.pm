@@ -109,8 +109,8 @@ sub dump_pairs {
                     Data::Dumper::Dumper($value->[1])
                 ];
             } catch {
-                warn "[Test::Power] [BUG]: $_";
-                push @WARNINGS, "[Test::Power] [BUG]: $_";
+                warn "[Devel::CodeObserver] [BUG]: $_";
+                push @WARNINGS, "[Devel::CodeObserver] [BUG]: $_";
             };
         }
     }

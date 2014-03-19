@@ -72,6 +72,7 @@ sub need_hook {
 package Devel::CallTrace::Result;
 
 use Try::Tiny;
+use constant { DEBUG => 0 };
 
 sub new {
     my $class = shift;
@@ -109,7 +110,7 @@ sub dump_pairs {
                     Data::Dumper::Dumper($value->[1])
                 ];
             } catch {
-                warn "[Devel::CodeObserver] [BUG]: $_";
+                DEBUG && warn "[Devel::CodeObserver] [BUG]: $_";
                 push @WARNINGS, "[Devel::CodeObserver] [BUG]: $_";
             };
         }

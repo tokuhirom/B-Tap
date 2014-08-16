@@ -195,13 +195,15 @@ CODE:
     OP * next_op = orig_op->op_next;
     OP * sibling_op = orig_op->op_sibling;
 
-    SVOP * push_sv = (SVOP*)newSVOP(OP_CUSTOM, 0, buf);
+    SVOP * push_sv = (SVOP*)newSVOP(OP_CONST, 0, buf);
+    push_sv->op_type   = OP_CUSTOM;
     push_sv->op_ppaddr = XS_B_Tap_pp_push_sv;
     push_sv->op_flags  = OPf_WANT_LIST;
     push_sv->op_sv = buf;
     SvREFCNT_inc(buf);
 
-    BINOP * b_tap = (BINOP*)newBINOP(OP_CUSTOM, 0, orig_op, (OP*)push_sv);
+    BINOP * b_tap = (BINOP*)newBINOP(OP_NULL, 0, orig_op, (OP*)push_sv);
+    b_tap->op_type     = OP_CUSTOM;
     b_tap->op_ppaddr   = XS_B_Tap_pp_tap;
     b_tap->op_flags    = (orig_op->op_flags & OPf_WANT) | OPf_KIDS;
     b_tap->op_first    = orig_op;

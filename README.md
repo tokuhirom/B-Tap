@@ -24,7 +24,7 @@ B::Tap is tapping library for B tree. `tap` function injects custom ops for fetc
 
 The implementation works, but it's not beautiful code. I'm newbie about the B world, Patches welcome.
 
-__WARNINGS: This module is in a alpha state. Any API will change without notice.__
+**WARNINGS: This module is in a alpha state. Any API will change without notice.**
 
 # FUNCTIONS
 

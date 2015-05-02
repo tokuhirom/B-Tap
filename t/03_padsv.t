@@ -7,6 +7,9 @@ use B::Tap;
 use B::Tools qw(op_walk);
 use Test::More;
 
+# ref. https://github.com/Perl/perl5/blob/blead/pod/perl5217delta.pod
+plan skip_all => "B::Deparse >= 1.35 can't parse optree modified by B::Tap." if $B::Deparse::VERSION >= 1.35;
+
 # B::Deparse thinks OP_ENTERSUB's next op must be LISTOP.
 
 my $mech;

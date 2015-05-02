@@ -195,6 +195,24 @@ CODE:
     OP * next_op = orig_op->op_next;
     OP * sibling_op = orig_op->op_sibling;
 
+    /*
+     * Before:
+     *
+     * (orig_op
+     *     next:next_op
+     *     sibling:sibling_op)
+     *
+     * After:
+     *
+     * (b_tap
+     *     first:(orig_op next:(push_sv next:b_tap))
+     *     last:(b_tap_push_sv next:b_tap)
+     *     next:next_op
+     *     sibling:sibling_op
+     *     )
+     */
+
+    /* Create 'b_tap_push_sv' node */
     SVOP * push_sv = (SVOP*)newSVOP(OP_CONST, 0, buf);
     push_sv->op_type   = OP_CUSTOM;
     push_sv->op_ppaddr = XS_B_Tap_pp_push_sv;

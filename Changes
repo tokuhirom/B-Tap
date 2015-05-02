@@ -2,6 +2,10 @@ Revision history for Perl extension B-Tap
 
 {{$NEXT}}
 
+0.15 2015-05-02T02:38:11Z
+
+    - Skip tests on bled perl
+
 0.14 2014-08-20T02:18:53Z
 
     commit 595a364add38356078177753b00574f4078ae7f8

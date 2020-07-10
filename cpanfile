@@ -1,4 +1,4 @@
-requires 'perl', '5.014000';
+requires 'perl', '5.022000';
 requires 'parent';
 requires 'B::Tools';
 requires 'Try::Tiny';

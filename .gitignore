@@ -26,3 +26,8 @@ MYMETA.*
 /B-Tap-*
 lib/B/Tap.c
 !lib/B/ppport.h
+/.build
+/_build_params
+/Build.bat
+!Build/
+!META.json
